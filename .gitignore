@@ -1,0 +1,104 @@
+
+---
+
+## 3️⃣ `.gitignore`
+
+```gitignore
+# ============================================
+# 📁 Archivos del sistema operativo
+# ============================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+._*
+.Spotlight-V100
+.Trashes
+
+# ============================================
+# 💻 Editores y IDEs
+# ============================================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+*.swp
+*.swo
+*~
+.cache/
+
+# ============================================
+# 🌐 Navegadores
+# ============================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============================================
+# 📦 Dependencias (si se agregan en el futuro)
+# ============================================
+node_modules/
+bower_components/
+jspm_packages/
+.pnp
+.pnp.js
+
+# ============================================
+# 🔧 Variables de entorno
+# ============================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ============================================
+# 🏗️ Build / Distribución
+# ============================================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+
+# ============================================
+# 📊 Analytics y caché
+# ============================================
+.cache/
+.temp/
+.tmp/
+
+# ============================================
+# 🖼️ Assets no optimizados (opcional)
+# ============================================
+assets/raw/
+assets/originals/
+
+# ============================================
+# 🔐 Archivos sensibles
+# ============================================
+*.key
+*.pem
+*.p12
+config.local.js
+secrets.json
+
+# ============================================
+# 🧪 Testing
+# ============================================
+coverage/
+.nyc_output/
+*.lcov
+
+# ============================================
+# 📝 Temporales
+# ============================================
+*.tmp
+*.bak
+*.backup
+*.old
