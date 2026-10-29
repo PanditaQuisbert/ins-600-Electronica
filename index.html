@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechStore - Tu tienda de electrónica</title>
-    <meta name="description" content="La mejor tienda de electrónica. Smartphones, laptops, gaming y más.">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="author" content="TechStore">
+    <meta name="keywords" content="electrónica, tecnología, smartphones, laptops, gaming, tienda online">
+    
+    <title>TechStore - Tu tienda de electrónica #1</title>
+    <meta name="description" content="TechStore - La mejor tienda de electrónica. Smartphones, laptops, gaming y más con envío gratis y garantía.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="TechStore - Tu tienda de electrónica">
+    <meta property="og:description" content="Descubre los últimos dispositivos electrónicos con los mejores precios.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=1200">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,6 +25,9 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚡%3C/text%3E%3C/svg%3E">
     
     <script>
         tailwind.config = {
@@ -27,6 +40,7 @@
                     colors: {
                         primary: {
                             50: '#eff6ff',
+                            100: '#dbeafe',
                             500: '#3b82f6',
                             600: '#2563eb',
                             700: '#1d4ed8',
@@ -36,6 +50,7 @@
                         'fade-in': 'fadeIn 0.6s ease-out',
                         'slide-up': 'slideUp 0.6s ease-out',
                         'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
                     },
                     keyframes: {
                         fadeIn: {
@@ -76,15 +91,63 @@
         .dark .card-hover:hover {
             box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
         }
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #667eea, #764ba2); border-radius: 5px; }
+        .dark ::-webkit-scrollbar-track { background: #1f2937; }
+        
+        /* Loader */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .loader.hidden { opacity: 0; visibility: hidden; }
+        .dark .loader { background: #111827; }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Filtros activos */
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        /* Product card overlay */
+        .product-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
+
+    <!-- Loader -->
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
+    </div>
 
     <!-- Header / Navbar -->
     <header class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800">
         <nav class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
-                <!-- Logo -->
                 <a href="#" class="flex items-center space-x-2">
                     <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
                         <i class="fas fa-bolt text-white text-xl"></i>
@@ -92,53 +155,45 @@
                     <span class="text-2xl font-bold gradient-text">TechStore</span>
                 </a>
 
-                <!-- Nav Links (desktop) -->
                 <ul class="hidden md:flex items-center space-x-8">
-                    <li><a href="#inicio" class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-500 font-medium transition">Inicio</a></li>
-                    <li><a href="#categorias" class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-500 font-medium transition">Categorías</a></li>
-                    <li><a href="#productos" class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-500 font-medium transition">Productos</a></li>
-                    <li><a href="#ofertas" class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-500 font-medium transition">Ofertas</a></li>
-                    <li><a href="#contacto" class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-500 font-medium transition">Contacto</a></li>
+                    <li><a href="#inicio" class="nav-link text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium transition">Inicio</a></li>
+                    <li><a href="#categorias" class="nav-link text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium transition">Categorías</a></li>
+                    <li><a href="#productos" class="nav-link text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium transition">Productos</a></li>
+                    <li><a href="#ofertas" class="nav-link text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium transition">Ofertas</a></li>
+                    <li><a href="#marcas" class="nav-link text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium transition">Marcas</a></li>
+                    <li><a href="#contacto" class="nav-link text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium transition">Contacto</a></li>
                 </ul>
 
-                <!-- Actions -->
                 <div class="flex items-center space-x-4">
-                    <!-- Dark mode toggle -->
-                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                    <button id="themeToggle" aria-label="Cambiar tema" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                         <i class="fas fa-moon text-gray-700 dark:hidden"></i>
                         <i class="fas fa-sun text-yellow-400 hidden dark:inline"></i>
                     </button>
-
-                    <!-- Search -->
-                    <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition hidden sm:block">
+                    <button aria-label="Buscar" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition hidden sm:block">
                         <i class="fas fa-search text-gray-700 dark:text-gray-200"></i>
                     </button>
-
-                    <!-- Cart -->
-                    <button id="cartBtn" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                    <button id="cartBtn" aria-label="Carrito" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                         <i class="fas fa-shopping-cart text-gray-700 dark:text-gray-200"></i>
                         <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">0</span>
                     </button>
-
-                    <!-- Mobile menu button -->
-                    <button id="mobileMenuBtn" class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                    <button id="mobileMenuBtn" aria-label="Menú" class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                         <i class="fas fa-bars text-gray-700 dark:text-gray-200"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Mobile menu -->
             <ul id="mobileMenu" class="hidden md:hidden mt-4 space-y-2 pb-4">
-                <li><a href="#inicio" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary-600">Inicio</a></li>
-                <li><a href="#categorias" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary-600">Categorías</a></li>
-                <li><a href="#productos" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary-600">Productos</a></li>
-                <li><a href="#ofertas" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary-600">Ofertas</a></li>
-                <li><a href="#contacto" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary-600">Contacto</a></li>
+                <li><a href="#inicio" class="block py-2 text-gray-700 dark:text-gray-200">Inicio</a></li>
+                <li><a href="#categorias" class="block py-2 text-gray-700 dark:text-gray-200">Categorías</a></li>
+                <li><a href="#productos" class="block py-2 text-gray-700 dark:text-gray-200">Productos</a></li>
+                <li><a href="#ofertas" class="block py-2 text-gray-700 dark:text-gray-200">Ofertas</a></li>
+                <li><a href="#marcas" class="block py-2 text-gray-700 dark:text-gray-200">Marcas</a></li>
+                <li><a href="#contacto" class="block py-2 text-gray-700 dark:text-gray-200">Contacto</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section id="inicio" class="relative overflow-hidden gradient-bg text-white">
         <div class="container mx-auto px-4 py-20 md:py-32 relative z-10">
             <div class="grid md:grid-cols-2 gap-12 items-center">
@@ -153,14 +208,13 @@
                         Descubre los últimos dispositivos electrónicos con los mejores precios del mercado. Envío gratis en compras mayores a $500.
                     </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="#productos" class="bg-white text-primary-700 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition shadow-lg hover:shadow-xl">
+                        <a href="#productos" class="bg-white text-primary-700 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition shadow-lg">
                             <i class="fas fa-shopping-bag mr-2"></i>Comprar ahora
                         </a>
                         <a href="#ofertas" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-primary-700 transition">
                             Ver ofertas
                         </a>
                     </div>
-                    <!-- Stats -->
                     <div class="grid grid-cols-3 gap-4 mt-12 max-w-md">
                         <div>
                             <div class="text-3xl font-bold">10K+</div>
@@ -179,12 +233,11 @@
                 <div class="relative animate-float">
                     <div class="absolute inset-0 bg-white/10 rounded-full blur-3xl"></div>
                     <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=600&fit=crop" 
-                         alt="Producto destacado" 
+                         alt="Producto destacado" loading="lazy"
                          class="relative rounded-3xl shadow-2xl">
                 </div>
             </div>
         </div>
-        <!-- Decorative circles -->
         <div class="absolute top-10 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
         <div class="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
     </section>
@@ -244,9 +297,7 @@
                     Encuentra exactamente lo que necesitas entre nuestras categorías más populares
                 </p>
             </div>
-
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                <!-- Categoría 1 -->
                 <a href="#" class="card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
                     <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-2xl flex items-center justify-center">
                         <i class="fas fa-mobile-alt text-white text-2xl"></i>
@@ -254,7 +305,6 @@
                     <h3 class="font-bold text-gray-800 dark:text-white">Smartphones</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">120 productos</p>
                 </a>
-                <!-- Categoría 2 -->
                 <a href="#" class="card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
                     <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-2xl flex items-center justify-center">
                         <i class="fas fa-laptop text-white text-2xl"></i>
@@ -262,7 +312,6 @@
                     <h3 class="font-bold text-gray-800 dark:text-white">Laptops</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">85 productos</p>
                 </a>
-                <!-- Categoría 3 -->
                 <a href="#" class="card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
                     <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-2xl flex items-center justify-center">
                         <i class="fas fa-gamepad text-white text-2xl"></i>
@@ -270,7 +319,6 @@
                     <h3 class="font-bold text-gray-800 dark:text-white">Gaming</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">95 productos</p>
                 </a>
-                <!-- Categoría 4 -->
                 <a href="#" class="card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
                     <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-2xl flex items-center justify-center">
                         <i class="fas fa-headphones text-white text-2xl"></i>
@@ -278,7 +326,6 @@
                     <h3 class="font-bold text-gray-800 dark:text-white">Audio</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">70 productos</p>
                 </a>
-                <!-- Categoría 5 -->
                 <a href="#" class="card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
                     <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-2xl flex items-center justify-center">
                         <i class="fas fa-camera text-white text-2xl"></i>
@@ -286,7 +333,6 @@
                     <h3 class="font-bold text-gray-800 dark:text-white">Cámaras</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">45 productos</p>
                 </a>
-                <!-- Categoría 6 -->
                 <a href="#" class="card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm">
                     <div class="w-16 h-16 mx-auto mb-4 gradient-bg rounded-2xl flex items-center justify-center">
                         <i class="fas fa-tv text-white text-2xl"></i>
@@ -298,30 +344,32 @@
         </div>
     </section>
 
-    <!-- Productos Destacados -->
+    <!-- Productos con Filtros -->
     <section id="productos" class="py-20 bg-white dark:bg-gray-800">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-8">
                 <div>
                     <h2 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
                         Productos <span class="gradient-text">Destacados</span>
                     </h2>
-                    <p class="text-gray-600 dark:text-gray-400 text-lg">
-                        Los más vendidos de la semana
-                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 text-lg">Los más vendidos de la semana</p>
                 </div>
-                <a href="#" class="mt-4 md:mt-0 text-primary-600 dark:text-primary-400 font-semibold hover:underline">
-                    Ver todos <i class="fas fa-arrow-right ml-2"></i>
-                </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="productsGrid">
-                <!-- Los productos se generan con JS -->
+            <!-- Filtros -->
+            <div class="flex flex-wrap justify-center gap-2 mb-10">
+                <button onclick="filterProducts('all')" class="filter-btn active px-5 py-2 rounded-full text-sm font-semibold border border-gray-300 dark:border-gray-600 transition">Todos</button>
+                <button onclick="filterProducts('smartphones')" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 transition">Smartphones</button>
+                <button onclick="filterProducts('laptops')" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 transition">Laptops</button>
+                <button onclick="filterProducts('gaming')" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 transition">Gaming</button>
+                <button onclick="filterProducts('audio')" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 transition">Audio</button>
             </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="productsGrid"></div>
         </div>
     </section>
 
-    <!-- Banner de Oferta -->
+    <!-- Banner Oferta -->
     <section id="ofertas" class="py-20">
         <div class="container mx-auto px-4">
             <div class="relative overflow-hidden rounded-3xl gradient-bg text-white">
@@ -330,13 +378,8 @@
                         <span class="inline-block bg-yellow-400 text-gray-900 px-4 py-1 rounded-full text-sm font-bold mb-4">
                             ⚡ OFERTA ESPECIAL
                         </span>
-                        <h2 class="text-4xl md:text-5xl font-extrabold mb-4">
-                            Hasta 50% OFF en Gaming
-                        </h2>
-                        <p class="text-blue-100 text-lg mb-8">
-                            Consolas, accesorios y videojuegos con descuentos increíbles. ¡Solo por tiempo limitado!
-                        </p>
-                        <!-- Countdown -->
+                        <h2 class="text-4xl md:text-5xl font-extrabold mb-4">Hasta 50% OFF en Gaming</h2>
+                        <p class="text-blue-100 text-lg mb-8">Consolas, accesorios y videojuegos con descuentos increíbles. ¡Solo por tiempo limitado!</p>
                         <div class="flex gap-4 mb-8">
                             <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center min-w-[70px]">
                                 <div class="text-3xl font-bold" id="days">05</div>
@@ -361,64 +404,73 @@
                     </div>
                     <div class="flex items-center justify-center">
                         <img src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=500&h=500&fit=crop" 
-                             alt="Gaming" 
+                             alt="Gaming" loading="lazy"
                              class="rounded-2xl shadow-2xl max-w-full">
                     </div>
                 </div>
-                <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marcas -->
+    <section id="marcas" class="py-16 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h3 class="text-center text-gray-500 dark:text-gray-400 text-sm uppercase tracking-widest mb-8">
+                Trabajamos con las mejores marcas
+            </h3>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60">
+                <span class="text-3xl font-bold text-gray-400 dark:text-gray-600">Apple</span>
+                <span class="text-3xl font-bold text-gray-400 dark:text-gray-600">Samsung</span>
+                <span class="text-3xl font-bold text-gray-400 dark:text-gray-600">Sony</span>
+                <span class="text-3xl font-bold text-gray-400 dark:text-gray-600">Microsoft</span>
+                <span class="text-3xl font-bold text-gray-400 dark:text-gray-600">Nintendo</span>
+                <span class="text-3xl font-bold text-gray-400 dark:text-gray-600">LG</span>
             </div>
         </div>
     </section>
 
     <!-- Testimonios -->
-    <section class="py-20 bg-white dark:bg-gray-800">
+    <section class="py-20">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <h2 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4">
                     Lo que dicen nuestros <span class="gradient-text">Clientes</span>
                 </h2>
             </div>
-
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="card-hover bg-gray-50 dark:bg-gray-900 rounded-2xl p-8">
+                <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
                     <div class="flex text-yellow-400 mb-4">
                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                     </div>
-                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic">
-                        "Excelente servicio, mi laptop llegó en perfectas condiciones y antes de lo esperado. 100% recomendado."
-                    </p>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic">"Excelente servicio, mi laptop llegó en perfectas condiciones y antes de lo esperado. 100% recomendado."</p>
                     <div class="flex items-center">
-                        <img src="https://i.pravatar.cc/50?img=12" class="w-12 h-12 rounded-full mr-4" alt="Cliente">
+                        <img src="https://i.pravatar.cc/50?img=12" class="w-12 h-12 rounded-full mr-4" alt="Cliente" loading="lazy">
                         <div>
                             <div class="font-bold text-gray-800 dark:text-white">María González</div>
                             <div class="text-sm text-gray-500">Cliente verificada</div>
                         </div>
                     </div>
                 </div>
-                <div class="card-hover bg-gray-50 dark:bg-gray-900 rounded-2xl p-8">
+                <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
                     <div class="flex text-yellow-400 mb-4">
                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                     </div>
-                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic">
-                        "Los precios son increíbles y la atención al cliente es de primera. Ya he comprado 3 veces aquí."
-                    </p>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic">"Los precios son increíbles y la atención al cliente es de primera. Ya he comprado 3 veces aquí."</p>
                     <div class="flex items-center">
-                        <img src="https://i.pravatar.cc/50?img=33" class="w-12 h-12 rounded-full mr-4" alt="Cliente">
+                        <img src="https://i.pravatar.cc/50?img=33" class="w-12 h-12 rounded-full mr-4" alt="Cliente" loading="lazy">
                         <div>
                             <div class="font-bold text-gray-800 dark:text-white">Carlos Ramírez</div>
                             <div class="text-sm text-gray-500">Cliente frecuente</div>
                         </div>
                     </div>
                 </div>
-                <div class="card-hover bg-gray-50 dark:bg-gray-900 rounded-2xl p-8">
+                <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
                     <div class="flex text-yellow-400 mb-4">
                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                     </div>
-                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic">
-                        "Mi smartphone llegó con todos los accesorios y la garantía funciona perfecto. Gran experiencia."
-                    </p>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic">"Mi smartphone llegó con todos los accesorios y la garantía funciona perfecto. Gran experiencia."</p>
                     <div class="flex items-center">
-                        <img src="https://i.pravatar.cc/50?img=47" class="w-12 h-12 rounded-full mr-4" alt="Cliente">
+                        <img src="https://i.pravatar.cc/50?img=47" class="w-12 h-12 rounded-full mr-4" alt="Cliente" loading="lazy">
                         <div>
                             <div class="font-bold text-gray-800 dark:text-white">Ana Martínez</div>
                             <div class="text-sm text-gray-500">Cliente verificada</div>
@@ -439,14 +491,10 @@
                 </div>
                 <div class="relative z-10 max-w-2xl mx-auto">
                     <i class="fas fa-envelope text-primary-400 text-5xl mb-6"></i>
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                        Suscríbete a nuestro Newsletter
-                    </h2>
-                    <p class="text-gray-300 mb-8">
-                        Recibe ofertas exclusivas y novedades directamente en tu correo
-                    </p>
-                    <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                        <input type="email" placeholder="tu@email.com" 
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Suscríbete a nuestro Newsletter</h2>
+                    <p class="text-gray-300 mb-8">Recibe ofertas exclusivas y novedades directamente en tu correo</p>
+                    <form id="newsletterForm" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                        <input type="email" required placeholder="tu@email.com" 
                                class="flex-1 px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-primary-400">
                         <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-full font-bold transition">
                             Suscribirse
@@ -468,22 +516,12 @@
                         </div>
                         <span class="text-2xl font-bold text-white">TechStore</span>
                     </div>
-                    <p class="text-sm mb-4">
-                        Tu tienda de electrónica de confianza. Los mejores productos al mejor precio.
-                    </p>
+                    <p class="text-sm mb-4">Tu tienda de electrónica de confianza. Los mejores productos al mejor precio.</p>
                     <div class="flex space-x-3">
-                        <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary-600 rounded-full flex items-center justify-center transition">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary-600 rounded-full flex items-center justify-center transition">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary-600 rounded-full flex items-center justify-center transition">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary-600 rounded-full flex items-center justify-center transition">
-                            <i class="fab fa-youtube"></i>
-                        </a>
+                        <a href="#" aria-label="Facebook" class="w-10 h-10 bg-gray-800 hover:bg-primary-600 rounded-full flex items-center justify-center transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter" class="w-10 h-10 bg-gray-800 hover:bg-primary-600 rounded-full flex items-center justify-center transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram" class="w-10 h-10 bg-gray-800 hover:bg-primary-600 rounded-full flex items-center justify-center transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube" class="w-10 h-10 bg-gray-800 hover:bg-primary-600 rounded-full flex items-center justify-center transition"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div>
@@ -493,7 +531,6 @@
                         <li><a href="#" class="hover:text-primary-400 transition">Laptops</a></li>
                         <li><a href="#" class="hover:text-primary-400 transition">Gaming</a></li>
                         <li><a href="#" class="hover:text-primary-400 transition">Audio</a></li>
-                        <li><a href="#" class="hover:text-primary-400 transition">Accesorios</a></li>
                     </ul>
                 </div>
                 <div>
@@ -503,53 +540,48 @@
                         <li><a href="#" class="hover:text-primary-400 transition">Envíos</a></li>
                         <li><a href="#" class="hover:text-primary-400 transition">Devoluciones</a></li>
                         <li><a href="#" class="hover:text-primary-400 transition">Garantía</a></li>
-                        <li><a href="#" class="hover:text-primary-400 transition">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="text-white font-bold mb-4">Contacto</h3>
                     <ul class="space-y-3 text-sm">
-                        <li class="flex items-start">
-                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-primary-400"></i>
-                            <span>Av. Tecnología 123, Ciudad</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-phone mr-3 text-primary-400"></i>
-                            <span>+1 234 567 890</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-envelope mr-3 text-primary-400"></i>
-                            <span>info@techstore.com</span>
-                        </li>
+                        <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-3 text-primary-400"></i><span>Av. Tecnología 123, Ciudad</span></li>
+                        <li class="flex items-center"><i class="fas fa-phone mr-3 text-primary-400"></i><span>+1 234 567 890</span></li>
+                        <li class="flex items-center"><i class="fas fa-envelope mr-3 text-primary-400"></i><span>info@techstore.com</span></li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-sm text-gray-500">© 2026 TechStore. Todos los derechos reservados.</p>
                 <div class="flex space-x-4 mt-4 md:mt-0">
-                    <i class="fab fa-cc-visa text-3xl text-gray-500 hover:text-white transition"></i>
-                    <i class="fab fa-cc-mastercard text-3xl text-gray-500 hover:text-white transition"></i>
-                    <i class="fab fa-cc-paypal text-3xl text-gray-500 hover:text-white transition"></i>
-                    <i class="fab fa-cc-amex text-3xl text-gray-500 hover:text-white transition"></i>
+                    <i class="fab fa-cc-visa text-3xl text-gray-500"></i>
+                    <i class="fab fa-cc-mastercard text-3xl text-gray-500"></i>
+                    <i class="fab fa-cc-paypal text-3xl text-gray-500"></i>
+                    <i class="fab fa-cc-amex text-3xl text-gray-500"></i>
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- Botón WhatsApp -->
-    <a href="https://wa.me/1234567890" target="_blank" 
+    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
        class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl transition z-40">
         <i class="fab fa-whatsapp text-white text-3xl"></i>
     </a>
 
-    <!-- Modal del carrito -->
+    <!-- Botón Scroll to top -->
+    <button id="scrollTop" aria-label="Subir" class="fixed bottom-24 right-6 w-12 h-12 gradient-bg text-white rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition z-40">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Modal carrito -->
     <div id="cartModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full max-h-[80vh] overflow-hidden flex flex-col">
             <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-white">
                     <i class="fas fa-shopping-cart mr-2"></i>Tu Carrito
                 </h3>
-                <button id="closeCart" class="text-gray-500 hover:text-gray-800 dark:hover:text-white">
+                <button id="closeCart" aria-label="Cerrar" class="text-gray-500 hover:text-gray-800 dark:hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -569,52 +601,69 @@
     </div>
 
     <script>
-        // Productos de ejemplo
+        // Loader
+        window.addEventListener('load', () => {
+            document.getElementById('loader').classList.add('hidden');
+        });
+
+        // Productos
         const products = [
-            { id: 1, name: 'iPhone 15 Pro Max', category: 'Smartphones', price: 1199, oldPrice: 1399, image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop', rating: 5, discount: 15 },
-            { id: 2, name: 'MacBook Pro M3', category: 'Laptops', price: 2499, oldPrice: 2799, image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop', rating: 5, discount: 10 },
-            { id: 3, name: 'PlayStation 5', category: 'Gaming', price: 499, oldPrice: 599, image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400&h=400&fit=crop', rating: 5, discount: 17 },
-            { id: 4, name: 'AirPods Pro 2', category: 'Audio', price: 249, oldPrice: 299, image: 'https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&h=400&fit=crop', rating: 4, discount: 17 },
-            { id: 5, name: 'Samsung Galaxy S24', category: 'Smartphones', price: 899, oldPrice: 1099, image: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=400&fit=crop', rating: 5, discount: 18 },
-            { id: 6, name: 'iPad Pro 12.9"', category: 'Tablets', price: 1099, oldPrice: 1299, image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=400&fit=crop', rating: 5, discount: 15 },
-            { id: 7, name: 'Sony WH-1000XM5', category: 'Audio', price: 399, oldPrice: 449, image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=400&fit=crop', rating: 5, discount: 11 },
-            { id: 8, name: 'Nintendo Switch OLED', category: 'Gaming', price: 349, oldPrice: 399, image: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=400&h=400&fit=crop', rating: 5, discount: 13 }
+            { id: 1, name: 'iPhone 15 Pro Max', category: 'smartphones', price: 1199, oldPrice: 1399, image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop', rating: 5, discount: 15 },
+            { id: 2, name: 'MacBook Pro M3', category: 'laptops', price: 2499, oldPrice: 2799, image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop', rating: 5, discount: 10 },
+            { id: 3, name: 'PlayStation 5', category: 'gaming', price: 499, oldPrice: 599, image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400&h=400&fit=crop', rating: 5, discount: 17 },
+            { id: 4, name: 'AirPods Pro 2', category: 'audio', price: 249, oldPrice: 299, image: 'https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&h=400&fit=crop', rating: 4, discount: 17 },
+            { id: 5, name: 'Samsung Galaxy S24', category: 'smartphones', price: 899, oldPrice: 1099, image: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=400&fit=crop', rating: 5, discount: 18 },
+            { id: 6, name: 'iPad Pro 12.9"', category: 'laptops', price: 1099, oldPrice: 1299, image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=400&fit=crop', rating: 5, discount: 15 },
+            { id: 7, name: 'Sony WH-1000XM5', category: 'audio', price: 399, oldPrice: 449, image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=400&fit=crop', rating: 5, discount: 11 },
+            { id: 8, name: 'Nintendo Switch OLED', category: 'gaming', price: 349, oldPrice: 399, image: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=400&h=400&fit=crop', rating: 5, discount: 13 }
         ];
 
-        // Renderizar productos
         const productsGrid = document.getElementById('productsGrid');
-        products.forEach(p => {
-            const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
-            productsGrid.innerHTML += `
-                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm group">
-                    <div class="relative overflow-hidden">
-                        <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
-                            -${p.discount}%
-                        </span>
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-56 object-cover group-hover:scale-110 transition duration-500">
-                        <button class="absolute top-3 right-3 w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-md hover:bg-red-500 hover:text-white transition">
-                            <i class="far fa-heart"></i>
-                        </button>
-                    </div>
-                    <div class="p-5">
-                        <span class="text-xs text-primary-600 dark:text-primary-400 font-semibold uppercase">${p.category}</span>
-                        <h3 class="font-bold text-gray-800 dark:text-white mt-1 mb-2">${p.name}</h3>
-                        <div class="flex text-yellow-400 text-sm mb-3">
-                            ${stars.split('').map(s => `<span>${s}</span>`).join('')}
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <span class="text-2xl font-bold text-gray-800 dark:text-white">$${p.price}</span>
-                                <span class="text-sm text-gray-400 line-through ml-2">$${p.oldPrice}</span>
+
+        function renderProducts(filter = 'all') {
+            const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+            productsGrid.innerHTML = filtered.map(p => {
+                const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
+                return `
+                    <div class="product-card card-hover bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm group">
+                        <div class="relative overflow-hidden">
+                            <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full z-10">-${p.discount}%</span>
+                            <img src="${p.image}" alt="${p.name}" loading="lazy" class="w-full h-56 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="product-overlay absolute inset-0 bg-black/40 flex items-center justify-center">
+                                <button onclick="addToCart(${p.id})" class="bg-white text-primary-700 px-6 py-2 rounded-full font-bold hover:bg-primary-600 hover:text-white transition">
+                                    <i class="fas fa-cart-plus mr-2"></i>Añadir
+                                </button>
                             </div>
-                            <button onclick="addToCart(${p.id})" class="w-10 h-10 gradient-bg text-white rounded-full flex items-center justify-center hover:scale-110 transition">
-                                <i class="fas fa-plus"></i>
+                            <button class="absolute top-3 right-3 w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-md hover:bg-red-500 hover:text-white transition">
+                                <i class="far fa-heart"></i>
                             </button>
                         </div>
+                        <div class="p-5">
+                            <span class="text-xs text-primary-600 dark:text-primary-400 font-semibold uppercase">${p.category}</span>
+                            <h3 class="font-bold text-gray-800 dark:text-white mt-1 mb-2">${p.name}</h3>
+                            <div class="flex text-yellow-400 text-sm mb-3">${stars.split('').map(s => `<span>${s}</span>`).join('')}</div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-2xl font-bold text-gray-800 dark:text-white">$${p.price}</span>
+                                    <span class="text-sm text-gray-400 line-through ml-2">$${p.oldPrice}</span>
+                                </div>
+                                <button onclick="addToCart(${p.id})" class="w-10 h-10 gradient-bg text-white rounded-full flex items-center justify-center hover:scale-110 transition">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            `;
-        });
+                `;
+            }).join('');
+        }
+
+        renderProducts();
+
+        function filterProducts(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderProducts(filter);
+        }
 
         // Carrito
         let cart = [];
@@ -626,13 +675,9 @@
         function addToCart(id) {
             const product = products.find(p => p.id === id);
             const existing = cart.find(i => i.id === id);
-            if (existing) {
-                existing.qty++;
-            } else {
-                cart.push({ ...product, qty: 1 });
-            }
+            if (existing) existing.qty++;
+            else cart.push({ ...product, qty: 1 });
             updateCart();
-            // Notificación
             showToast(`${product.name} añadido al carrito`);
         }
 
@@ -650,13 +695,13 @@
             }
             cartItems.innerHTML = cart.map(i => `
                 <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-                    <img src="${i.image}" class="w-16 h-16 object-cover rounded-lg" alt="${i.name}">
+                    <img src="${i.image}" class="w-16 h-16 object-cover rounded-lg" alt="${i.name}" loading="lazy">
                     <div class="flex-1">
                         <h4 class="font-semibold text-gray-800 dark:text-white text-sm">${i.name}</h4>
                         <p class="text-xs text-gray-500">Cantidad: ${i.qty}</p>
                         <p class="text-primary-600 font-bold">$${(i.price * i.qty).toFixed(2)}</p>
                     </div>
-                    <button onclick="removeFromCart(${i.id})" class="text-red-500 hover:text-red-700">
+                    <button onclick="removeFromCart(${i.id})" aria-label="Eliminar" class="text-red-500 hover:text-red-700">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -665,7 +710,6 @@
             cartTotal.textContent = `$${total.toFixed(2)}`;
         }
 
-        // Modal carrito
         document.getElementById('cartBtn').addEventListener('click', () => {
             cartModal.classList.remove('hidden');
             cartModal.classList.add('flex');
@@ -678,7 +722,7 @@
         // Toast
         function showToast(msg) {
             const toast = document.createElement('div');
-            toast.className = 'fixed bottom-24 right-6 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
+            toast.className = 'fixed bottom-24 left-6 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-slide-up';
             toast.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${msg}`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 2500);
@@ -699,6 +743,26 @@
             document.getElementById('mobileMenu').classList.toggle('hidden');
         });
 
+        // Newsletter
+        document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('¡Suscripción exitosa! 🎉');
+            e.target.reset();
+        });
+
+        // Scroll to top
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.remove('opacity-0', 'invisible');
+                scrollTopBtn.classList.add('opacity-100', 'visible');
+            } else {
+                scrollTopBtn.classList.add('opacity-0', 'invisible');
+                scrollTopBtn.classList.remove('opacity-100', 'visible');
+            }
+        });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
         // Countdown
         function updateCountdown() {
             const end = new Date();
@@ -706,14 +770,10 @@
             end.setHours(end.getHours() + 12);
             const now = new Date();
             const diff = end - now;
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById('days').textContent = String(d).padStart(2, '0');
-            document.getElementById('hours').textContent = String(h).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(m).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(s).padStart(2, '0');
+            document.getElementById('days').textContent = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById('hours').textContent = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
